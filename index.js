@@ -1,7 +1,8 @@
 require('dotenv').config()
-const express = ('express'),
-    massive = ('massive'),
-    app = express(),
+const express = require('express'),
+    massive = require('massive'),
+    ctrl = require('./products_controller')
+app = express(),
     { SERVER_PORT, CONNECTION_STRING } = process.env
 
 
@@ -14,6 +15,17 @@ massive({
     app.set('db', db)
     console.log('db connected')
 }).catch(err => console.log(err))
+
+
+app.get('/api/products', ctrl.getAll)
+
+app.get('/api/products/:id', ctrl.getOne)
+app.put('/api/products/:id', ctrl.update)
+app.post('/api/products', ctrl.create)
+app.delete('/api/products/:id', ctrl.delete)
+
+
+
 
 app.listen(SERVER_PORT, () => {
     console.log(`Hitting Dingers on port ${SERVER_PORT}.`)
